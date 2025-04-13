@@ -16,28 +16,6 @@ function updateBodyBackground() {
 window.addEventListener("scroll", updateBodyBackground);
 window.addEventListener("load", updateBodyBackground);
 
-// 2. Update Bottom Graphic Visibility
-const bottomGraphic = document.getElementById("bottom-graphic");
-
-function updateBottomGraphic() {
-  const scrollY = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = Math.min(scrollY / docHeight, 1);
-
-  if (progress > 0.8) {
-    const localProgress = (progress - 0.8) / 0.2;
-    const lift = -180; // adjust this to raise it more
-    const yFinal = (1 - localProgress) * 100 + lift;
-    bottomGraphic.style.opacity = localProgress;
-    bottomGraphic.style.transform = `translateX(-50%) translateY(${yFinal}%)`;
-  } else {
-    bottomGraphic.style.opacity = 0;
-    bottomGraphic.style.transform = "translateX(-50%) translateY(100%)";
-  }
-}
-window.addEventListener("scroll", updateBottomGraphic);
-window.addEventListener("load", updateBottomGraphic);
-
 // 3. Update Horizontal Moving SVG Position
 const movingSvg = document.getElementById("moving-svg");
 function updateMovingSvgPosition() {
@@ -194,3 +172,55 @@ function fadeHeaderAndFooter() {
 
 window.addEventListener("scroll", fadeHeaderAndFooter);
 window.addEventListener("load", fadeHeaderAndFooter);
+
+
+function adjustResponsiveElements() {
+  const isMobile = window.innerWidth < 768;
+
+  const quote = document.getElementById("top-quote");
+  if (quote) {
+    quote.style.fontSize = isMobile ? "1.2rem" : "3.5rem";
+    quote.style.top = isMobile ? "1rem" : "2rem";
+  }
+
+  const fire = document.getElementById("bottom-graphic");
+  if (fire) {
+    fire.style.maxHeight = isMobile ? "100px" : "200px";
+  }
+}
+
+window.addEventListener("resize", adjustResponsiveElements);
+window.addEventListener("load", adjustResponsiveElements);
+
+function updateFooterVisibility() {
+  const footer = document.querySelector("footer");
+  const scrollY = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = Math.min(scrollY / docHeight, 1);
+
+  // Show when past 90% of page scroll
+  if (progress > 0.9) {
+    footer.style.opacity = 1;
+  } else {
+    footer.style.opacity = 0;
+  }
+}
+
+window.addEventListener("scroll", updateFooterVisibility);
+window.addEventListener("load", updateFooterVisibility);
+
+function updateBottomBannerVisibility() {
+  const banner = document.getElementById("fixed-bottom-banner");
+  const scrollY = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = Math.min(scrollY / docHeight, 1);
+
+  if (progress > 0.9) {
+    banner.style.opacity = 1;
+  } else {
+    banner.style.opacity = 0;
+  }
+}
+
+window.addEventListener("scroll", updateBottomBannerVisibility);
+window.addEventListener("load", updateBottomBannerVisibility);

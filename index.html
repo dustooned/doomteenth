@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Event Website Clean Layout</title>
   <link rel="stylesheet" href="styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Header -->
   <header>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
     <h1>DOOMTEENTH</h1>
   </header>
-<!-- Navigation Bar -->
-  <div id="top-quote">
-    <h1>You have free will, use it to come here.</h1>
-  </div>
+
+  <!-- Hero Quote as top scrollable section -->
+  <section class="top-quote-section">
+    <h2 id="top-quote">You have free will,<br>use it to come here.</h2>
+  </section>
 
   <!-- Main Content -->
   <main>
@@ -51,24 +52,22 @@
     </section>
   </main>
 
-  <!-- Fixed Horizontal Moving SVG -->
+  <!-- Horizontal Moving SVG -->
   <svg id="moving-svg" width="100" height="100" viewBox="0 0 100 100">
     <circle cx="50" cy="50" r="40" fill="orange"></circle>
   </svg>
 
-  <!-- Bottom Graphic: initially hidden, appears above the footer -->
-  <<div id="bottom-graphic">
-    <img src="assets/bottom-banner.svg" alt="Bottom-Banner" />
-  </div>
-    </svg>
-  </div>
-
   <!-- Footer -->
   <footer>
-    <h1?>Footer</h1>
+    <h1>Footer</h1>
     <p>&copy; 2025 Event Company. All rights reserved.</p>
   </footer>
 
   <script src="script.js"></script>
 </body>
+
+<div id="fixed-bottom-banner">
+  <img src="assets/bottom-banner.svg" alt="Bottom Banner Graphic" />
+</div>
+
 </html>

@@ -1,14 +1,12 @@
-/* styles.css */
 :root {
-  --footer-height: 5rem;         /* Adjust as needed */
-  --bottom-graphic-height: 200px;  /* Height of the bottom graphic */
+  --footer-height: 5rem;
+  --bottom-graphic-height: 200px;
 }
 
 body {
-  font-family: Lora;
+  font-family: Lora, serif;
   margin: 0;
   padding: 0;
-  /* Initial background is dark; will be updated based on scroll */
   background: linear-gradient(135deg, #000000, #858585);
   color: white;
   overflow-x: hidden;
@@ -22,32 +20,6 @@ header {
   z-index: 10;
 }
 
-#top-quote {
-  position: fixed;
-  top: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  font-size: 3.5rem;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  width: 100%;
-  pointer-events: none; /* important: avoids blocking scrolling/clicks */
-  opacity: 1;
-  transition: opacity 1s ease-out;
-}
-
-@media (max-width: 768px) {
-  #top-quote {
-    font-size: 1.5rem;
-    top: 1rem;
-    padding: 0 1rem;
-    line-height: 1.2;
-    word-wrap: break-word;
-  }
-}
-
 nav ul {
   list-style: none;
   padding: 0;
@@ -58,16 +30,42 @@ nav ul li {
   margin: 0 1rem;
 }
 
-/* Ensure main content has bottom padding for footer + bottom graphic */
+/* Top Quote Section – now scrollable */
+.top-quote-section {
+  text-align: center;
+  padding: 4rem 1rem 2rem;
+  background: #14162e;
+}
+
+#top-quote {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  line-height: 1.3;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .top-quote-section {
+    padding: 2.5rem 1rem 1rem;
+  }
+
+  #top-quote {
+    font-size: 1.6rem;
+    max-width: 90%;
+    margin: 0 auto;
+    word-wrap: break-word;
+  }
+}
+
 main {
-  padding-bottom: calc(var(--footer-height) + var(--bottom-graphic-height));
+  padding-bottom: var(--footer-height);
 }
 
 .centered-section {
   max-width: 800px;
   margin: 4rem auto;
   padding: 2rem;
-  /* Example background; can be replaced by custom images or gradients */
   background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3));
   background-repeat: no-repeat;
   background-size: cover;
@@ -78,55 +76,38 @@ main {
   will-change: background-position;
 }
 
-
-/* Fixed Footer */
+/* Footer */
 footer {
-  opacity: 0.85;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: var(--footer-height);
-  padding: 1rem;
+  height: 3rem; /* 💡 Reduced from 5rem or more */
+  padding: 0.5rem 1rem;
   background: #14162e;
   text-align: center;
   z-index: 1000;
   color: white;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  height:auto
 }
 
-/* Horizontal Moving SVG */
+@media (max-width: 768px) {
+  footer {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
+}
+
+/* Moving SVG */
 #moving-svg {
   position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 0; /* Adjust so it appears behind normal content if desired */
-}
-
-#bottom-graphic {
-  position: fixed;
-  bottom: var(--footer-height);
-  left: 50%;
-  transform: translateX(-50%) translateY(100%);
-  width: 100%;
-  max-width: 100vw;
-  height: var(--bottom-graphic-height);
-  text-align: center;
-  z-index: 900;
-  opacity: 0;
-  transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
-  pointer-events: none;
-}
-
-@media (max-width: 768px) {
-  #bottom-graphic {
-    max-height: 120px;
-  }
-}
-
-#bottom-graphic img {
-  width: 100%;
-  height: auto;
-  display: block;
+  z-index: 0;
 }
 
 .main-event-image {
@@ -139,7 +120,26 @@ footer {
   object-fit: contain;
 }
 
+/* Utility Responsive */
 @media (max-width: 768px) {
+  .mobile-hide {
+    display: none;
+  }
+
+  .mobile-stack {
+    display: block;
+    width: 100%;
+  }
+
+  .mobile-font-sm {
+    font-size: 1.2rem;
+  }
+
+  .mobile-center {
+    text-align: center;
+    margin: 0 auto;
+  }
+
   .centered-section {
     padding: 1.5rem 1rem;
     margin: 2rem auto;
@@ -152,4 +152,33 @@ footer {
   p {
     font-size: 1rem;
   }
+
+  #bottom-graphic {
+    max-height: 120px;
+  }
 }
+
+#fixed-bottom-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 0.6s ease-in-out;
+}
+
+#fixed-bottom-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  #fixed-bottom-banner img {
+    max-height: 100px; /* you can tweak this */
+  }
+}
+
