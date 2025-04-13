@@ -40,7 +40,11 @@ header {
 
 @media (max-width: 768px) {
   #top-quote {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    top: 1rem;
+    padding: 0 1rem;
+    line-height: 1.2;
+    word-wrap: break-word;
   }
 }
 
@@ -113,6 +117,12 @@ footer {
   pointer-events: none;
 }
 
+@media (max-width: 768px) {
+  #bottom-graphic {
+    max-height: 120px;
+  }
+}
+
 #bottom-graphic img {
   width: 100%;
   height: auto;
@@ -127,4 +137,19 @@ footer {
   border-radius: 0.75rem;
   margin: 1rem auto;
   object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .centered-section {
+    padding: 1.5rem 1rem;
+    margin: 2rem auto;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
 }
