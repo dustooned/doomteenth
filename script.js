@@ -1,62 +1,50 @@
-// script.js
 
 // 1. Update Body Background Gradient
 function updateBodyBackground() {
   const scrollY = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   const progress = Math.min(scrollY / docHeight, 1);
-  // Interpolate between dark black (rgb(0,0,0)) and dark orange (rgb(93, 140, 211))
   const r = Math.round(190 * progress);
   const g = Math.round(30 * progress);
   const b = Math.round(45 * progress);
   const color = `rgb(${r},${g},${b})`;
-  // Apply as uniform background gradient
   document.body.style.background = `linear-gradient(135deg, ${color}, ${color})`;
 }
 window.addEventListener("scroll", updateBodyBackground);
 window.addEventListener("load", updateBodyBackground);
 
-// 3. Update Horizontal Moving SVG Position
+// 2. Update Horizontal Moving SVG Position
 const movingSvg = document.getElementById("moving-svg");
 function updateMovingSvgPosition() {
   const scrollY = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   const progress = Math.min(scrollY / docHeight, 1);
-  // Map progress linearly to 0% to 100%
   const xPercent = progress * 100;
   movingSvg.style.left = xPercent + "%";
 }
 window.addEventListener("scroll", updateMovingSvgPosition);
 window.addEventListener("load", updateMovingSvgPosition);
 
+// 3. Update SVG Color on Scroll
 function updateMovingSvgColor() {
   const scrollY = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = Math.min(scrollY / docHeight, 1); // value between 0 and 1
-  
-  // Define starting and ending colors:
-  const startColor = { r: 255, g: 255, b: 255};
-  const endColor   = {  r: 255, g: 140, b: 0 };
-  
-  // Linearly interpolate each color channel:
+  const progress = Math.min(scrollY / docHeight, 1);
+  const startColor = { r: 255, g: 255, b: 255 };
+  const endColor = { r: 255, g: 140, b: 0 };
   const r = Math.round(startColor.r * (1 - progress) + endColor.r * progress);
   const g = Math.round(startColor.g * (1 - progress) + endColor.g * progress);
   const b = Math.round(startColor.b * (1 - progress) + endColor.b * progress);
-  
   const newColor = `rgb(${r}, ${g}, ${b})`;
-  console.log("newColor =", newColor); // Debug output
-  
-  // Update the moving SVG's circle fill:
   const circle = document.querySelector("#moving-svg circle");
   if (circle) {
     circle.setAttribute("fill", newColor);
-  } else {
-    console.warn("No <circle> element found inside #moving-svg.");
   }
 }
+window.addEventListener("scroll", updateMovingSvgColor);
+window.addEventListener("load", updateMovingSvgColor);
 
-// 4. Starfield with Ember Scroll Behavior (no opacity fade)
-
+// 4. Starfield with Ember Scroll Behavior
 const canvas = document.createElement("canvas");
 document.body.appendChild(canvas);
 canvas.style.position = "fixed";
@@ -70,8 +58,8 @@ canvas.style.pointerEvents = "none";
 const ctx = canvas.getContext("2d");
 let width, height, particles = [];
 
-const baseColor = "#ffffff"; // star color at top
-const emberColor = "#FF4500"; // ember glow at bottom
+const baseColor = "#ffffff";
+const emberColor = "#FF4500";
 
 function hexToRgb(hex) {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -113,99 +101,102 @@ function getScrollProgress() {
 
 function animate() {
   const progress = getScrollProgress();
-  const speedFactor = 1 + progress * 40.5; // crank up ember speed
-  const targetCount = 1 + Math.floor(progress * 200); // more stars = more embers
-
+  const speedFactor = 1 + progress * 40.5;
+  const targetCount = 1 + Math.floor(progress * 200);
   while (particles.length < targetCount) {
     particles.push(createParticle());
   }
-
   ctx.clearRect(0, 0, width, height);
-
   const startRGB = hexToRgb(baseColor);
   const endRGB = hexToRgb(emberColor);
-
   for (let p of particles) {
     p.x += p.speedX * speedFactor;
     p.y += p.speedY * speedFactor;
-
     if (p.x < 0 || p.x > width) p.speedX *= -1;
     if (p.y < 0 || p.y > height) p.speedY *= -1;
-
     ctx.beginPath();
-    const dynamicRadius = p.baseRadius * (1 + progress * 1.5); // grows up to 2.5x
+    const dynamicRadius = p.baseRadius * (1 + progress * 1.5);
     ctx.arc(p.x, p.y, dynamicRadius, 0, Math.PI * 2);
     ctx.fillStyle = lerpColor(startRGB, endRGB, progress);
     ctx.fill();
   }
-
   requestAnimationFrame(animate);
 }
 animate();
 
-window.addEventListener("scroll", updateMovingSvgColor);
-window.addEventListener("load", updateMovingSvgColor);
-
+// 5. Fade Top Quote
 function fadeTopQuote() {
-  const quote = document.getElementById("top-quote");
+  const section = document.querySelector(".top-quote-section");
   const scrollY = window.scrollY;
-  if (quote) {
-    quote.style.opacity = scrollY > 30 ? "0" : "1";
+  
+  if (section) {
+    if (scrollY > 30) {
+      section.style.opacity = "0";
+      section.style.maxHeight = "0";
+      section.style.overflow = "hidden";
+    } else {
+      section.style.opacity = "1";
+      section.style.maxHeight = "400px"; // or whatever your desired height is
+      section.style.overflow = "visible";
+    }
   }
 }
 window.addEventListener("scroll", fadeTopQuote);
 window.addEventListener("load", fadeTopQuote);
 
+// 6. Fade Header, Logo, and Footer
 function fadeHeaderAndFooter() {
   const scrollY = window.scrollY;
-
   const header = document.querySelector("header");
-  if (header) {
-    header.style.opacity = scrollY > 40 ? "0.6" : "1";
+  const logo = document.querySelector(".header-logo");
+  const footer = document.querySelector("footer");
+
+  const fadeStart = 10;
+  const fadeEnd = 80;
+
+  let opacityValue = 1;
+  if (scrollY > fadeStart) {
+    opacityValue = Math.max(0, 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart));
   }
 
-  const footer = document.querySelector("footer");
+  if (header) header.style.opacity = opacityValue;
+  if (logo) logo.style.opacity = opacityValue;
+
   if (footer) {
     footer.style.opacity = scrollY > 40 ? "0.6" : "1";
   }
 }
-
 window.addEventListener("scroll", fadeHeaderAndFooter);
 window.addEventListener("load", fadeHeaderAndFooter);
 
-
+// 7. Adjust Responsive Elements
 function adjustResponsiveElements() {
   const isMobile = window.innerWidth < 768;
-
   const quote = document.getElementById("top-quote");
   if (quote) {
     quote.style.fontSize = isMobile ? "1.2rem" : "3.5rem";
     quote.style.top = isMobile ? "1rem" : "2rem";
   }
-
   const fire = document.getElementById("bottom-graphic");
   if (fire) {
     fire.style.maxHeight = isMobile ? "100px" : "200px";
   }
 }
-
 window.addEventListener("resize", adjustResponsiveElements);
 window.addEventListener("load", adjustResponsiveElements);
 
+// 8. Show Footer and Banner on Scroll Threshold
 function updateFooterVisibility() {
   const footer = document.querySelector("footer");
   const scrollY = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   const progress = Math.min(scrollY / docHeight, 1);
-
-  // Show when past 90% of page scroll
   if (progress > 0.9) {
     footer.style.opacity = 1;
   } else {
     footer.style.opacity = 0;
   }
 }
-
 window.addEventListener("scroll", updateFooterVisibility);
 window.addEventListener("load", updateFooterVisibility);
 
@@ -214,13 +205,30 @@ function updateBottomBannerVisibility() {
   const scrollY = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   const progress = Math.min(scrollY / docHeight, 1);
-
   if (progress > 0.9) {
     banner.style.opacity = 1;
   } else {
     banner.style.opacity = 0;
   }
 }
-
 window.addEventListener("scroll", updateBottomBannerVisibility);
 window.addEventListener("load", updateBottomBannerVisibility);
+window.addEventListener("load", () => {
+  const logo = document.getElementById("logo-img");
+  const quote = document.getElementById("top-quote");
+
+  if (logo && logo.complete) {
+    logo.classList.add("animate-up");
+  } else if (logo) {
+    logo.addEventListener("load", () => {
+      logo.classList.add("animate-up");
+    });
+  }
+
+  if (quote) {
+    setTimeout(() => {
+      quote.classList.add("animate-up");
+    }, 500); // 👈 Delay to follow the logo smoothly
+  }
+});
+
